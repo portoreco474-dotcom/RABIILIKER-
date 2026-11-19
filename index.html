@@ -6,72 +6,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#172554">
 <title>RABIILIKER</title>
+
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f1f5fb;
- color:#172554;
-}
-header{
- background:linear-gradient(120deg,#172554,#5145cd);
- color:white;padding:25px 18px;
- border-radius:0 0 25px 25px;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5fb;color:#172554}
+header{background:linear-gradient(120deg,#172554,#5145cd);color:white;padding:25px 18px;border-radius:0 0 25px 25px}
 .logo{font-size:27px;font-weight:bold}
 header p{color:#dbeafe;font-size:14px}
 .container{max-width:850px;margin:auto;padding:16px}
-.card{
- background:white;padding:18px;
- border-radius:17px;margin-bottom:15px;
- box-shadow:0 4px 15px #1725540b;
-}
-.balance{
- background:linear-gradient(120deg,#4338ca,#7c3aed);
- color:white;
-}
+.card{background:white;padding:18px;border-radius:17px;margin-bottom:15px;box-shadow:0 4px 15px #1725540b}
+.balance{background:linear-gradient(120deg,#4338ca,#7c3aed);color:white}
 .balance h2{font-size:30px;margin:12px 0}
-.grid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:12px;
-}
-.stat{
- background:#f3f5ff;
- padding:17px;border-radius:14px;
- text-align:center;
-}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{background:#f3f5ff;padding:17px;border-radius:14px;text-align:center}
 .stat strong{display:block;font-size:22px;color:#5145cd}
 h3{margin-top:0}
-button,select,input{
- width:100%;padding:13px;
- border-radius:10px;
- border:1px solid #dbe3f0;
- font-size:15px;
- margin-top:9px;
-}
-button{
- background:#5145cd;color:white;
- border:0;font-weight:bold;
- cursor:pointer;
-}
+button,select,input{width:100%;padding:13px;border-radius:10px;border:1px solid #dbe3f0;font-size:15px;margin-top:9px}
+button{background:#5145cd;color:white;border:0;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
 button.secondary{background:#e9eafe;color:#4338ca}
-.item{
- border:1px solid #e8edf5;
- border-radius:12px;padding:13px;
- margin:10px 0;
-}
+.item{border:1px solid #e8edf5;border-radius:12px;padding:13px;margin:10px 0}
 .item strong{display:block;margin-bottom:7px}
 .small{color:#64748b;font-size:13px}
-nav{
- display:flex;gap:8px;flex-wrap:wrap;
- margin-bottom:15px;
-}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
 nav button{width:auto;flex:1;min-width:90px}
 footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
+.message{padding:12px;border-radius:10px;margin-top:10px;font-size:14px;display:none}
+.success{background:#dcfce7;color:#166534}
+.error{background:#fee2e2;color:#991b1b}
+.hidden{display:none!important}
+.account-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:420px){.grid{gap:8px}.stat{padding:12px}}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -82,65 +50,69 @@ footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
 <div class="container">
 
  <div class="card balance">
-  <div>رصيد النقاط التجريبي</div>
-  <h2>0 نقطة</h2>
-  <span>مرحباً بك في RABIILIKER</span>
+  <div>رصيد نقاط حسابك</div>
+  <h2 id="balance">0 نقطة</h2>
+  <span id="welcome">مرحباً بك في RABIILIKER</span>
  </div>
 
  <div class="grid">
   <div class="stat">
-   <strong>0</strong>
+   <strong id="dailyPoints">0</strong>
    <span>النقاط اليومية</span>
   </div>
   <div class="stat">
-   <strong>0</strong>
+   <strong id="completedTasks">0</strong>
    <span>المهام المكتملة</span>
   </div>
   <div class="stat">
-   <strong>0</strong>
+   <strong id="discovered">0</strong>
    <span>المحتويات المكتشفة</span>
   </div>
   <div class="stat">
-   <strong>0</strong>
+   <strong id="accountPoints">0</strong>
    <span>رصيد الحساب</span>
   </div>
  </div>
 
  <div class="card">
   <h3>👤 حسابي</h3>
-  <input type="email" placeholder="البريد الإلكتروني">
-  <button onclick="alert('سيتم تفعيل تسجيل الدخول بعد ربط قاعدة البيانات')">
-   تسجيل الدخول
-  </button>
-  <p class="small">سيتم تفعيل الحسابات الحقيقية في المرحلة القادمة.</p>
+
+  <div id="authForm">
+   <label for="email">البريد الإلكتروني</label>
+   <input id="email" type="email" placeholder="أدخل بريدك الإلكتروني" autocomplete="email">
+
+   <label for="password">كلمة المرور</label>
+   <input id="password" type="password" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+
+   <button id="loginBtn" onclick="signIn()">تسجيل الدخول</button>
+   <button id="signupBtn" class="secondary" onclick="signUp()">إنشاء حساب جديد</button>
+  </div>
+
+  <div id="userArea" class="hidden">
+   <p>أنت مسجل الدخول بهذا البريد:</p>
+   <strong id="userEmail"></strong>
+   <button class="secondary" onclick="signOutUser()">تسجيل الخروج</button>
+  </div>
+
+  <div id="message" class="message"></div>
+  <p class="small">عند إنشاء حساب جديد، قد يصلك بريد إلكتروني لتأكيد التسجيل.</p>
  </div>
 
  <div class="card">
   <h3>⭐ باقات النقاط</h3>
   <div class="grid">
-   <div class="item">
-    <strong>100 نقطة</strong>
-    <span class="small">باقة تجريبية</span>
-   </div>
-   <div class="item">
-    <strong>500 نقطة</strong>
-    <span class="small">باقة تجريبية</span>
-   </div>
-   <div class="item">
-    <strong>1000 نقطة</strong>
-    <span class="small">باقة تجريبية</span>
-   </div>
-   <div class="item">
-    <strong>2000 نقطة</strong>
-    <span class="small">باقة تجريبية</span>
-   </div>
+   <div class="item"><strong>100 نقطة</strong><span class="small">باقة تجريبية</span></div>
+   <div class="item"><strong>500 نقطة</strong><span class="small">باقة تجريبية</span></div>
+   <div class="item"><strong>1000 نقطة</strong><span class="small">باقة تجريبية</span></div>
+   <div class="item"><strong>2000 نقطة</strong><span class="small">باقة تجريبية</span></div>
   </div>
+  <p class="small">الباقات معروضة حالياً للتجربة فقط، ولم يتم تفعيل الشراء.</p>
  </div>
 
  <div class="card">
   <h3>🌍 الدول المستهدفة</h3>
-  <select>
-   <option>اختر الدولة</option>
+  <select id="country">
+   <option value="">اختر الدولة</option>
    <option>المغرب</option>
    <option>الجزائر</option>
    <option>تونس</option>
@@ -159,7 +131,6 @@ footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
    <button onclick="showTab('comments')">💬 التعليقات</button>
    <button onclick="showTab('reels')">🎬 Reels</button>
   </nav>
-
   <div id="tabContent">
    <div class="item">
     <strong>👋 مرحباً بك</strong>
@@ -170,32 +141,247 @@ footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
 
  <div class="card">
   <h3>📊 ملخص النشاط</h3>
-  <p>النقاط المكتسبة: 0</p>
-  <p>المهام المكتملة: 0</p>
-  <p>آخر نشاط: لا يوجد</p>
+  <p>النقاط المكتسبة: <strong id="activityPoints">0</strong></p>
+  <p>المهام المكتملة: <strong id="activityTasks">0</strong></p>
+  <p>آخر نشاط: <span id="lastActivity">لا يوجد</span></p>
  </div>
 
 </div>
 
 <footer>
-RABIILIKER © 2026
-<br>منصة التفاعل الاجتماعي
+ RABIILIKER © 2026
+ <br>منصة التفاعل الاجتماعي
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-function showTab(type){
- const content=document.getElementById('tabContent');
- const data={
-  likes:'👍 اكتشف المنشورات وعبّر عن إعجابك الحقيقي.',
-  comments:'💬 شارك بتعليقات مفيدة وصادقة.',
-  reels:'🎬 اكتشف مقاطع Reels جديدة.'
- };
- content.innerHTML='<div class="item"><strong>'+
- data[type]+'</strong><span class="small">سيتم ربط المحتوى الحقيقي في المرحلة القادمة.</span></div>';
+// ضع رابط مشروع Supabase هنا
+const SUPABASE_URL = "https://flvexaiiyarihtafkwqf.supabase.co/rest/v1/";
+
+// ضع Publishable Key هنا
+const SUPABASE_KEY = "sb_publishable_IG2P1roUz_8CLuvSaLNhPA_1ZHGGs8J";
+
+let supabaseClient = null;
+let currentUser = null;
+
+function showMessage(message,type="error"){
+ const box=document.getElementById("message");
+ box.textContent=message;
+ box.className="message "+(type==="success"?"success":"error");
+ box.style.display="block";
 }
+
+function clearMessage(){
+ const box=document.getElementById("message");
+ box.textContent="";
+ box.style.display="none";
+}
+
+function setLoading(loading){
+ document.getElementById("loginBtn").disabled=loading;
+ document.getElementById("signupBtn").disabled=loading;
+}
+
+function resetDashboard(){
+ document.getElementById("balance").textContent="0 نقطة";
+ document.getElementById("accountPoints").textContent="0";
+ document.getElementById("dailyPoints").textContent="0";
+ document.getElementById("activityPoints").textContent="0";
+ document.getElementById("welcome").textContent="مرحباً بك في RABIILIKER";
+}
+
+function updateUserInterface(user){
+ currentUser=user;
+
+ if(user){
+  document.getElementById("authForm").classList.add("hidden");
+  document.getElementById("userArea").classList.remove("hidden");
+  document.getElementById("userEmail").textContent=user.email||"";
+  document.getElementById("welcome").textContent="مرحباً بك في حسابك";
+ }else{
+  document.getElementById("authForm").classList.remove("hidden");
+  document.getElementById("userArea").classList.add("hidden");
+  resetDashboard();
+ }
+}
+
+async function loadProfile(user){
+ if(!supabaseClient || !user)return;
+
+ const {data,error}=await supabaseClient
+  .from("profiles")
+  .select("points,email")
+  .eq("id",user.id)
+  .maybeSingle();
+
+ if(error){
+  console.error("Profile error:",error);
+  showMessage("تم تسجيل الدخول، لكن تعذر تحميل رصيد الحساب. راجع إعدادات جدول profiles.");
+  return;
+ }
+
+ if(!data){
+  showMessage("الحساب مسجل، لكن لم يتم العثور على ملفه في جدول profiles.");
+  return;
+ }
+
+ const points=Number(data.points)||0;
+ document.getElementById("balance").textContent=points+" نقطة";
+ document.getElementById("accountPoints").textContent=points;
+ document.getElementById("activityPoints").textContent=points;
+ document.getElementById("welcome").textContent="مرحباً "+(data.email||user.email);
+}
+
+async function signUp(){
+ clearMessage();
+
+ if(!supabaseClient){
+  showMessage("خاصك أولاً إعداد رابط Supabase وPublishable Key.");
+  return;
+ }
+
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+
+ if(!email||!password){
+  showMessage("أدخل البريد الإلكتروني وكلمة المرور.");
+  return;
+ }
+
+ if(password.length<6){
+  showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
+  return;
+ }
+
+ setLoading(true);
+
+ const {data,error}=await supabaseClient.auth.signUp({
+  email:email,
+  password:password
+ });
+
+ setLoading(false);
+
+ if(error){
+  showMessage("تعذر إنشاء الحساب: "+error.message);
+  return;
+ }
+
+ if(data.session){
+  updateUserInterface(data.user);
+  await loadProfile(data.user);
+  showMessage("تم إنشاء الحساب بنجاح.", "success");
+ }else{
+  showMessage("تم إرسال طلب التسجيل. تفقد بريدك الإلكتروني لتأكيد الحساب.", "success");
+ }
+}
+
+async function signIn(){
+ clearMessage();
+
+ if(!supabaseClient){
+  showMessage("خاصك أولاً إعداد رابط Supabase وPublishable Key.");
+  return;
+ }
+
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+
+ if(!email||!password){
+  showMessage("أدخل البريد الإلكتروني وكلمة المرور.");
+  return;
+ }
+
+ setLoading(true);
+
+ const {data,error}=await supabaseClient.auth.signInWithPassword({
+  email:email,
+  password:password
+ });
+
+ setLoading(false);
+
+ if(error){
+  showMessage("تعذر تسجيل الدخول: "+error.message);
+  return;
+ }
+
+ updateUserInterface(data.user);
+ await loadProfile(data.user);
+ showMessage("تم تسجيل الدخول بنجاح.", "success");
+}
+
+async function signOutUser(){
+ if(!supabaseClient)return;
+
+ const {error}=await supabaseClient.auth.signOut();
+
+ if(error){
+  showMessage("تعذر تسجيل الخروج: "+error.message);
+  return;
+ }
+
+ updateUserInterface(null);
+ showMessage("تم تسجيل الخروج.", "success");
+}
+
+function showTab(type){
+ const content=document.getElementById("tabContent");
+
+ const data={
+  likes:"👍 اكتشف المنشورات وعبّر عن إعجابك الحقيقي.",
+  comments:"💬 شارك بتعليقات مفيدة وصادقة.",
+  reels:"🎬 اكتشف مقاطع Reels جديدة."
+ };
+
+ content.innerHTML=
+  '<div class="item"><strong>'+data[type]+'</strong>'+
+  '<span class="small">سيتم ربط المحتوى الحقيقي في المرحلة القادمة.</span></div>';
+}
+
+async function initializeApp(){
+ if(!window.supabase){
+  showMessage("تعذر تحميل مكتبة الاتصال. تحقق من اتصال الإنترنت.");
+  return;
+ }
+
+ if(
+  SUPABASE_URL==="ضع_رابط_المشروع_هنا" ||
+  SUPABASE_KEY==="ضع_Publishable_Key_هنا"
+ ){
+  showMessage("الإعداد ناقص: أدخل رابط مشروع Supabase وPublishable Key في الكود.");
+  return;
+ }
+
+ supabaseClient=window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+ );
+
+ const {data,error}=await supabaseClient.auth.getSession();
+
+ if(error){
+  showMessage("تعذر التحقق من جلسة الحساب.");
+  return;
+ }
+
+ if(data.session){
+  updateUserInterface(data.session.user);
+  await loadProfile(data.session.user);
+ }
+
+ supabaseClient.auth.onAuthStateChange((event,session)=>{
+  updateUserInterface(session?session.user:null);
+
+  if(session){
+   setTimeout(()=>loadProfile(session.user),0);
+  }
+ });
+}
+
+initializeApp();
 </script>
 
 </body>
 </html>
-
-HTML
