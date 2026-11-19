@@ -3,10 +3,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#172554">
 <title>RABIILIKER</title>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f1f5fb;color:#172554}
@@ -21,11 +20,11 @@ header p{color:#dbeafe;font-size:14px}
 .stat{background:#f3f5ff;padding:17px;border-radius:14px;text-align:center}
 .stat strong{display:block;font-size:22px;color:#5145cd;overflow-wrap:anywhere}
 h3{margin-top:0}
-button,select,input{width:100%;padding:13px;border-radius:10px;border:1px solid #dbe3f0;font-size:15px;margin-top:9px}
+button,select,input,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #dbe3f0;font-size:15px;margin-top:9px}
 button{background:#5145cd;color:white;border:0;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
+button:disabled{opacity:.6}
 button.secondary{background:#e9eafe;color:#4338ca}
-.item{border:1px solid #e8edf5;border-radius:12px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
+.item,.user-row{border:1px solid #e8edf5;border-radius:12px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
 .item strong{display:block;margin-bottom:7px}
 .small{color:#64748b;font-size:13px}
 nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
@@ -37,13 +36,14 @@ footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
 .hidden{display:none!important}
 .admin-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .admin-tag{background:#dcfce7;color:#166534;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold}
-.user-row{border:1px solid #e5eaf3;padding:13px;border-radius:12px;margin-top:10px;background:#fbfcff}
-.user-row p{margin:6px 0;font-size:14px;overflow-wrap:anywhere}
+.user-row p{margin:6px 0;font-size:14px}
 .user-role{font-size:12px;color:#5145cd;font-weight:bold}
-@media(max-width:420px){.grid{gap:8px}.stat{padding:12px}}
+.link-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:8px 0}
+.link-actions{display:flex;gap:8px}
+.link-actions button{flex:1}
+@media(max-width:420px){.grid{gap:8px}.stat{padding:12px}.link-actions{flex-direction:column}}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -60,142 +60,104 @@ footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
  </div>
 
  <div class="grid">
-  <div class="stat">
-   <strong id="dailyPoints">0</strong>
-   <span>النقاط اليومية</span>
-  </div>
-  <div class="stat">
-   <strong id="completedTasks">0</strong>
-   <span>المهام المكتملة</span>
-  </div>
-  <div class="stat">
-   <strong id="discovered">0</strong>
-   <span>المحتويات المكتشفة</span>
-  </div>
-  <div class="stat">
-   <strong id="accountPoints">0</strong>
-   <span>رصيد الحساب</span>
-  </div>
+  <div class="stat"><strong id="dailyPoints">0</strong><span>النقاط اليومية</span></div>
+  <div class="stat"><strong id="completedTasks">0</strong><span>المهام المكتملة</span></div>
+  <div class="stat"><strong id="discovered">0</strong><span>الروابط التي فتحتها</span></div>
+  <div class="stat"><strong id="accountPoints">0</strong><span>رصيد الحساب</span></div>
  </div>
 
- <!-- لوحة تحكم المدير -->
+ <!-- لوحة المدير -->
  <div id="adminPanel" class="card hidden">
   <div class="admin-heading">
    <h3>🛡️ لوحة تحكم المدير</h3>
    <span class="admin-tag">مدير رئيسي</span>
   </div>
-
-  <p class="small">مرحباً بك في مركز إدارة RABIILIKER.</p>
-
+  <p class="small">مركز إدارة RABIILIKER</p>
   <div class="grid">
-   <div class="stat">
-    <strong id="adminUsersCount">0</strong>
-    <span>عدد المستخدمين</span>
-   </div>
-   <div class="stat">
-    <strong id="adminPointsCount">0</strong>
-    <span>مجموع النقاط</span>
-   </div>
+   <div class="stat"><strong id="adminUsersCount">0</strong><span>عدد المستخدمين</span></div>
+   <div class="stat"><strong id="adminPointsCount">0</strong><span>مجموع النقاط</span></div>
   </div>
-
-  <h3 style="margin-top:22px">👥 إدارة المستخدمين</h3>
+  <h3>👥 إدارة المستخدمين</h3>
   <button id="refreshUsersBtn" onclick="loadAdminUsers()">🔄 تحديث قائمة المستخدمين</button>
-
   <div id="adminMessage" class="message"></div>
-
-  <div id="adminUsersList">
-   <p class="small">اضغط على تحديث قائمة المستخدمين لعرض الحسابات.</p>
-  </div>
+  <div id="adminUsersList"><p class="small">اضغط لتحديث القائمة.</p></div>
  </div>
 
+ <!-- الحساب -->
  <div class="card">
   <h3>👤 حسابي</h3>
-
   <div id="authForm">
    <label for="email">البريد الإلكتروني</label>
    <input id="email" type="email" placeholder="أدخل بريدك الإلكتروني" autocomplete="email">
-
    <label for="password">كلمة المرور</label>
    <input id="password" type="password" placeholder="أدخل كلمة المرور" autocomplete="current-password">
-
    <button id="loginBtn" onclick="signIn()">تسجيل الدخول</button>
    <button id="signupBtn" class="secondary" onclick="signUp()">إنشاء حساب جديد</button>
   </div>
-
   <div id="userArea" class="hidden">
    <p>أنت مسجل الدخول بهذا البريد:</p>
    <strong id="userEmail"></strong>
    <button class="secondary" onclick="signOutUser()">تسجيل الخروج</button>
   </div>
-
   <div id="message" class="message"></div>
-  <p class="small">عند إنشاء حساب جديد، قد يصلك بريد إلكتروني لتأكيد التسجيل.</p>
+  <p class="small">قد يصلك بريد إلكتروني لتأكيد التسجيل.</p>
  </div>
 
+ <!-- إضافة رابط -->
  <div class="card">
-  <h3>⭐ باقات النقاط</h3>
-  <div class="grid">
-   <div class="item"><strong>100 نقطة</strong><span class="small">باقة تجريبية</span></div>
-   <div class="item"><strong>500 نقطة</strong><span class="small">باقة تجريبية</span></div>
-   <div class="item"><strong>1000 نقطة</strong><span class="small">باقة تجريبية</span></div>
-   <div class="item"><strong>2000 نقطة</strong><span class="small">باقة تجريبية</span></div>
-  </div>
-  <p class="small">الباقات معروضة حالياً للتجربة فقط، ولم يتم تفعيل الشراء.</p>
- </div>
+  <h3>➕ أضف محتواك</h3>
+  <p class="small">أضف رابط صفحتك أو فيديوك ليكتشفه المستخدمون الآخرون.</p>
 
- <div class="card">
-  <h3>🌍 الدول المستهدفة</h3>
-  <select id="country">
-   <option value="">اختر الدولة</option>
-   <option>المغرب</option>
-   <option>الجزائر</option>
-   <option>تونس</option>
-   <option>مصر</option>
-   <option>السعودية</option>
-   <option>الإمارات</option>
-   <option>فرنسا</option>
-   <option>جميع الدول</option>
+  <label for="platform">المنصة</label>
+  <select id="platform">
+   <option value="Facebook">Facebook</option>
+   <option value="Instagram">Instagram</option>
+   <option value="TikTok">TikTok</option>
+   <option value="YouTube">YouTube</option>
   </select>
+
+  <label for="linkTitle">عنوان المحتوى</label>
+  <input id="linkTitle" maxlength="100" placeholder="مثلاً: تحدي الجليد الجديد">
+
+  <label for="socialUrl">رابط الصفحة أو الفيديو</label>
+  <input id="socialUrl" type="url" placeholder="https://...">
+
+  <label for="linkDescription">وصف اختياري</label>
+  <textarea id="linkDescription" rows="3" maxlength="500" placeholder="اكتب وصفاً قصيراً للمحتوى"></textarea>
+
+  <button id="addLinkBtn" onclick="addSocialLink()">نشر الرابط</button>
+  <div id="linkMessage" class="message"></div>
  </div>
 
+ <!-- اكتشاف المحتوى -->
  <div class="card">
-  <h3>🎮 مركز المحتوى</h3>
-  <nav>
-   <button onclick="showTab('likes')">👍 الإعجابات</button>
-   <button onclick="showTab('comments')">💬 التعليقات</button>
-   <button onclick="showTab('reels')">🎬 Reels</button>
-  </nav>
-  <div id="tabContent">
-   <div class="item">
-    <strong>👋 مرحباً بك</strong>
-    <span class="small">اكتشف محتويات جديدة وشارك بآرائك الحقيقية.</span>
-   </div>
+  <h3>🌍 اكتشف محتوى الآخرين</h3>
+  <p class="small">تصفح الروابط وافتح الصفحات والفيديوهات الأصلية.</p>
+  <button class="secondary" onclick="loadSocialLinks()">🔄 تحديث المحتوى</button>
+  <div id="socialLinksList">
+   <p class="small">سجل الدخول لعرض المحتوى.</p>
   </div>
  </div>
 
+ <!-- ملخص النشاط -->
  <div class="card">
   <h3>📊 ملخص النشاط</h3>
   <p>النقاط المكتسبة: <strong id="activityPoints">0</strong></p>
-  <p>المهام المكتملة: <strong id="activityTasks">0</strong></p>
   <p>آخر نشاط: <span id="lastActivity">لا يوجد</span></p>
  </div>
 
 </div>
 
-<footer>
- RABIILIKER © 2026
- <br>منصة التفاعل الاجتماعي
-</footer>
+<footer>RABIILIKER © 2026<br>منصة اكتشاف المحتوى</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const SUPABASE_URL = "https://flvexaiiyarihtafkwqf.supabase.co";
-const SUPABASE_KEY = "sb_publishable_IG2P1roUz_8CLuvSaLNhPA_1ZHGGs8J";
+const SUPABASE_URL="https://flvexaiiyarihtafkwqf.supabase.co";
+const SUPABASE_KEY="sb_publishable_IG2P1roUz_8CLuvSaLNhPA_1ZHGGs8J";
 
-let supabaseClient = null;
-let currentUser = null;
-let currentRole = "user";
+let supabaseClient=null;
+let currentUser=null;
+let currentRole="user";
 
 function showMessage(message,type="error"){
  const box=document.getElementById("message");
@@ -203,23 +165,21 @@ function showMessage(message,type="error"){
  box.className="message "+(type==="success"?"success":"error");
  box.style.display="block";
 }
-
-function clearMessage(){
- const box=document.getElementById("message");
- box.textContent="";
- box.style.display="none";
+function showLinkMessage(message,type="error"){
+ const box=document.getElementById("linkMessage");
+ box.textContent=message;
+ box.className="message "+(type==="success"?"success":"error");
+ box.style.display="block";
 }
-
 function showAdminMessage(message,type="error"){
  const box=document.getElementById("adminMessage");
  box.textContent=message;
  box.className="message "+(type==="success"?"success":"error");
  box.style.display="block";
 }
-
-function setLoading(loading){
- document.getElementById("loginBtn").disabled=loading;
- document.getElementById("signupBtn").disabled=loading;
+function setLoading(value){
+ document.getElementById("loginBtn").disabled=value;
+ document.getElementById("signupBtn").disabled=value;
 }
 
 function resetDashboard(){
@@ -227,17 +187,18 @@ function resetDashboard(){
  document.getElementById("accountPoints").textContent="0";
  document.getElementById("dailyPoints").textContent="0";
  document.getElementById("activityPoints").textContent="0";
+ document.getElementById("discovered").textContent="0";
  document.getElementById("welcome").textContent="مرحباً بك في RABIILIKER";
  document.getElementById("adminPanel").classList.add("hidden");
  document.getElementById("adminUsersList").textContent="لم يتم تحميل المستخدمين بعد.";
  document.getElementById("adminUsersCount").textContent="0";
  document.getElementById("adminPointsCount").textContent="0";
+ document.getElementById("socialLinksList").textContent="سجل الدخول لعرض المحتوى.";
  currentRole="user";
 }
 
 function updateUserInterface(user){
  currentUser=user;
-
  if(user){
   document.getElementById("authForm").classList.add("hidden");
   document.getElementById("userArea").classList.remove("hidden");
@@ -252,27 +213,22 @@ function updateUserInterface(user){
 }
 
 async function loadProfile(user){
- if(!supabaseClient || !user)return;
+ if(!supabaseClient||!user)return;
 
  const {data,error}=await supabaseClient
-  .from("profiles")
-  .select("points,email,role")
-  .eq("id",user.id)
-  .maybeSingle();
+  .from("profiles").select("points,email,role")
+  .eq("id",user.id).maybeSingle();
 
  if(error){
-  console.error("Profile error:",error);
-  showMessage("تم تسجيل الدخول، لكن تعذر تحميل بيانات الحساب: "+error.message);
+  showMessage("تعذر تحميل بيانات الحساب: "+error.message);
   return;
  }
-
  if(!data){
-  showMessage("الحساب مسجل، لكن لم يتم العثور على ملفه في جدول profiles.");
+  showMessage("لم يتم العثور على ملف الحساب في profiles.");
   return;
  }
 
  const points=Number(data.points)||0;
-
  document.getElementById("balance").textContent=points+" نقطة";
  document.getElementById("accountPoints").textContent=points;
  document.getElementById("activityPoints").textContent=points;
@@ -286,36 +242,32 @@ async function loadProfile(user){
  }else{
   document.getElementById("adminPanel").classList.add("hidden");
  }
+
+ await loadSocialLinks();
+ await loadMyVisitCount();
 }
 
 async function loadAdminUsers(){
- if(!supabaseClient || !currentUser)return;
+ if(!supabaseClient||!currentUser)return;
 
  const button=document.getElementById("refreshUsersBtn");
  const list=document.getElementById("adminUsersList");
-
  button.disabled=true;
- button.textContent="جارٍ تحميل المستخدمين...";
-
+ button.textContent="جارٍ التحميل...";
  list.textContent="جارٍ تحميل البيانات...";
 
  try{
-  // التحقق من دور الحساب من قاعدة البيانات
   const {data:profile,error:profileError}=await supabaseClient
-   .from("profiles")
-   .select("role")
-   .eq("id",currentUser.id)
-   .maybeSingle();
+   .from("profiles").select("role")
+   .eq("id",currentUser.id).maybeSingle();
 
   if(profileError)throw profileError;
-
-  if(!profile || profile.role!=="admin"){
+  if(!profile||profile.role!=="admin"){
    currentRole="user";
    document.getElementById("adminPanel").classList.add("hidden");
    throw new Error("ليس لديك صلاحية المدير.");
   }
 
-  // قاعدة البيانات تتحقق من صلاحية المدير عبر RLS
   const {data:users,error}=await supabaseClient
    .from("profiles")
    .select("id,email,points,role,created_at")
@@ -325,40 +277,32 @@ async function loadAdminUsers(){
 
   const userList=users||[];
   const totalPoints=userList.reduce((sum,item)=>sum+(Number(item.points)||0),0);
-
   document.getElementById("adminUsersCount").textContent=userList.length;
   document.getElementById("adminPointsCount").textContent=totalPoints;
-
   list.replaceChildren();
 
-  if(userList.length===0){
+  if(!userList.length){
    list.textContent="لا يوجد مستخدمون حالياً.";
   }else{
    userList.forEach((item,index)=>{
     const row=document.createElement("div");
     row.className="user-row";
-
     const title=document.createElement("strong");
     title.textContent=(index+1)+". "+(item.email||"بدون بريد");
-
     const points=document.createElement("p");
     points.textContent="الرصيد: "+(Number(item.points)||0)+" نقطة";
-
     const role=document.createElement("p");
     role.className="user-role";
     role.textContent=item.role==="admin"?"🛡️ مدير":"👤 مستخدم عادي";
-
     row.append(title,points,role);
     list.appendChild(row);
    });
   }
-
   showAdminMessage("تم تحميل قائمة المستخدمين بنجاح.","success");
-
  }catch(error){
-  console.error("Admin error:",error);
+  console.error(error);
   list.textContent="تعذر تحميل قائمة المستخدمين.";
-  showAdminMessage(error.message||"حدث خطأ أثناء تحميل المستخدمين.");
+  showAdminMessage(error.message||"حدث خطأ.");
  }finally{
   button.disabled=false;
   button.textContent="🔄 تحديث قائمة المستخدمين";
@@ -366,81 +310,46 @@ async function loadAdminUsers(){
 }
 
 async function signUp(){
- clearMessage();
-
- if(!supabaseClient){
-  showMessage("تعذر الاتصال بقاعدة البيانات.");
-  return;
- }
+ document.getElementById("message").style.display="none";
+ if(!supabaseClient)return showMessage("تعذر الاتصال بقاعدة البيانات.");
 
  const email=document.getElementById("email").value.trim();
  const password=document.getElementById("password").value;
 
- if(!email||!password){
-  showMessage("أدخل البريد الإلكتروني وكلمة المرور.");
-  return;
- }
-
- if(password.length<6){
-  showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
-  return;
- }
+ if(!email||!password)return showMessage("أدخل البريد وكلمة المرور.");
+ if(password.length<6)return showMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
 
  setLoading(true);
-
  const {data,error}=await supabaseClient.auth.signUp({
-  email:email,
-  password:password,
-  options:{
-   emailRedirectTo:"https://portoreco474-dotcom.github.io/RABIILIKER-/"
-  }
+  email,password,
+  options:{emailRedirectTo:"https://portoreco474-dotcom.github.io/RABIILIKER-/"}
  });
-
  setLoading(false);
 
- if(error){
-  showMessage("تعذر إنشاء الحساب: "+error.message);
-  return;
- }
+ if(error)return showMessage("تعذر إنشاء الحساب: "+error.message);
 
  if(data.session){
   updateUserInterface(data.user);
   await loadProfile(data.user);
   showMessage("تم إنشاء الحساب بنجاح.","success");
  }else{
-  showMessage("تم إرسال طلب التسجيل. تفقد بريدك الإلكتروني لتأكيد الحساب.","success");
+  showMessage("تم إرسال طلب التسجيل. تفقد بريدك لتأكيد الحساب.","success");
  }
 }
 
 async function signIn(){
- clearMessage();
-
- if(!supabaseClient){
-  showMessage("تعذر الاتصال بقاعدة البيانات.");
-  return;
- }
+ document.getElementById("message").style.display="none";
+ if(!supabaseClient)return showMessage("تعذر الاتصال بقاعدة البيانات.");
 
  const email=document.getElementById("email").value.trim();
  const password=document.getElementById("password").value;
-
- if(!email||!password){
-  showMessage("أدخل البريد الإلكتروني وكلمة المرور.");
-  return;
- }
+ if(!email||!password)return showMessage("أدخل البريد وكلمة المرور.");
 
  setLoading(true);
-
- const {data,error}=await supabaseClient.auth.signInWithPassword({
-  email:email,
-  password:password
- });
-
+ const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
  setLoading(false);
 
- if(error){
-  showMessage("تعذر تسجيل الدخول: "+error.message);
-  return;
- }
+ if(error)return showMessage("تعذر تسجيل الدخول: "+error.message);
 
  updateUserInterface(data.user);
  await loadProfile(data.user);
@@ -449,54 +358,203 @@ async function signIn(){
 
 async function signOutUser(){
  if(!supabaseClient)return;
-
  const {error}=await supabaseClient.auth.signOut();
-
- if(error){
-  showMessage("تعذر تسجيل الخروج: "+error.message);
-  return;
- }
-
+ if(error)return showMessage("تعذر تسجيل الخروج: "+error.message);
  updateUserInterface(null);
  showMessage("تم تسجيل الخروج.","success");
 }
 
-function showTab(type){
- const content=document.getElementById("tabContent");
+// السماح بروابط المنصات المعروفة فقط
+function validateSocialUrl(raw,platform){
+ try{
+  const url=new URL(raw.trim());
+  if(url.protocol!=="https:")return false;
+  const host=url.hostname.toLowerCase().replace(/^www\./,"");
+  const domains={
+   Facebook:["facebook.com","fb.watch","m.facebook.com"],
+   Instagram:["instagram.com"],
+   TikTok:["tiktok.com"],
+   YouTube:["youtube.com","youtu.be","m.youtube.com"]
+  };
+  return (domains[platform]||[]).some(domain=>host===domain||host.endsWith("."+domain));
+ }catch(e){return false;}
+}
 
- const data={
-  likes:"👍 اكتشف المنشورات وعبّر عن إعجابك الحقيقي.",
-  comments:"💬 شارك بتعليقات مفيدة وصادقة.",
-  reels:"🎬 اكتشف مقاطع Reels جديدة."
- };
+async function addSocialLink(){
+ if(!currentUser)return showLinkMessage("سجل الدخول أولاً.");
 
- const box=document.createElement("div");
- box.className="item";
+ const platform=document.getElementById("platform").value;
+ const title=document.getElementById("linkTitle").value.trim();
+ const url=document.getElementById("socialUrl").value.trim();
+ const description=document.getElementById("linkDescription").value.trim();
 
- const title=document.createElement("strong");
- title.textContent=data[type];
+ if(!title||!url)return showLinkMessage("أدخل عنوان المحتوى والرابط.");
+ if(!validateSocialUrl(url,platform)){
+  return showLinkMessage("الرابط غير صالح أو لا ينتمي إلى المنصة المختارة.");
+ }
 
- const description=document.createElement("span");
- description.className="small";
- description.textContent="سيتم ربط المحتوى الحقيقي في المرحلة القادمة.";
+ const button=document.getElementById("addLinkBtn");
+ button.disabled=true;
+ button.textContent="جارٍ نشر الرابط...";
 
- box.append(title,description);
- content.replaceChildren(box);
+ const {error}=await supabaseClient.from("social_links").insert({
+  user_id:currentUser.id,
+  platform,title,url,description,
+  is_active:true
+ });
+
+ button.disabled=false;
+ button.textContent="نشر الرابط";
+
+ if(error){
+  console.error(error);
+  return showLinkMessage("تعذر نشر الرابط: "+error.message);
+ }
+
+ document.getElementById("linkTitle").value="";
+ document.getElementById("socialUrl").value="";
+ document.getElementById("linkDescription").value="";
+ showLinkMessage("تم نشر الرابط بنجاح.","success");
+ await loadSocialLinks();
+}
+
+async function loadSocialLinks(){
+ const list=document.getElementById("socialLinksList");
+ if(!supabaseClient||!currentUser){
+  list.textContent="سجل الدخول لعرض المحتوى.";
+  return;
+ }
+
+ list.textContent="جارٍ تحميل الروابط...";
+
+ const {data,error}=await supabaseClient
+  .from("social_links")
+  .select("id,user_id,platform,title,url,description,created_at")
+  .eq("is_active",true)
+  .order("created_at",{ascending:false})
+  .limit(100);
+
+ if(error){
+  console.error(error);
+  list.textContent="تعذر تحميل الروابط: "+error.message;
+  return;
+ }
+
+ list.replaceChildren();
+
+ if(!data||data.length===0){
+  list.textContent="لا توجد روابط حالياً. كن أول من يضيف محتواه!";
+  return;
+ }
+
+ for(const link of data){
+  const card=document.createElement("div");
+  card.className="item";
+
+  const title=document.createElement("strong");
+  title.textContent="🌐 "+link.title;
+
+  const platform=document.createElement("p");
+  platform.className="small";
+  platform.textContent="المنصة: "+link.platform;
+
+  const description=document.createElement("p");
+  description.textContent=link.description||"اكتشف هذا المحتوى.";
+
+  const meta=document.createElement("div");
+  meta.className="link-meta";
+  const owner=document.createElement("span");
+  owner.className="small";
+  owner.textContent=link.user_id===currentUser.id?"رابطك الشخصي":"محتوى مستخدم";
+  meta.appendChild(owner);
+
+  const actions=document.createElement("div");
+  actions.className="link-actions";
+
+  const openButton=document.createElement("button");
+  openButton.textContent="🔗 فتح المحتوى الأصلي";
+  openButton.onclick=()=>openSocialLink(link);
+
+  actions.appendChild(openButton);
+
+  if(link.user_id===currentUser.id){
+   const deleteButton=document.createElement("button");
+   deleteButton.className="secondary";
+   deleteButton.textContent="حذف الرابط";
+   deleteButton.onclick=()=>deleteSocialLink(link.id);
+   actions.appendChild(deleteButton);
+  }
+
+  card.append(title,platform,description,meta,actions);
+  list.appendChild(card);
+ }
+}
+
+async function openSocialLink(link){
+ if(!currentUser)return showMessage("سجل الدخول أولاً.");
+
+ // فتح الرابط مباشرة بناءً على ضغط المستخدم
+ const newWindow=window.open(link.url,"_blank","noopener,noreferrer");
+ if(!newWindow){
+  showMessage("المتصفح منع فتح الرابط. اسمح بالنوافذ المنبثقة وحاول مجدداً.");
+  return;
+ }
+
+ // تسجيل زيارة الرابط داخل RABIILIKER فقط
+ if(link.user_id===currentUser.id)return;
+
+ const {error}=await supabaseClient.from("social_link_visits").insert({
+  link_id:link.id,
+  visitor_id:currentUser.id
+ });
+
+ if(error&&error.code!=="23505"){
+  console.error("Visit record error:",error);
+  showMessage("تم فتح الرابط، لكن تعذر تسجيل الزيارة.");
+ }else{
+  document.getElementById("lastActivity").textContent=new Date().toLocaleString("ar");
+  await loadMyVisitCount();
+ }
+}
+
+async function loadMyVisitCount(){
+ if(!currentUser)return;
+ const {count,error}=await supabaseClient
+  .from("social_link_visits")
+  .select("id",{count:"exact",head:true})
+  .eq("visitor_id",currentUser.id);
+
+ if(!error){
+  document.getElementById("discovered").textContent=count||0;
+ }
+}
+
+async function deleteSocialLink(id){
+ if(!currentUser)return;
+ if(!confirm("هل تريد حذف هذا الرابط؟"))return;
+
+ const {error}=await supabaseClient
+  .from("social_links").delete()
+  .eq("id",id)
+  .eq("user_id",currentUser.id);
+
+ if(error){
+  showMessage("تعذر حذف الرابط: "+error.message);
+  return;
+ }
+ showMessage("تم حذف الرابط.","success");
+ await loadSocialLinks();
 }
 
 async function initializeApp(){
  if(!window.supabase){
-  showMessage("تعذر تحميل مكتبة الاتصال. تحقق من اتصال الإنترنت.");
+  showMessage("تعذر تحميل مكتبة الاتصال. تحقق من الإنترنت.");
   return;
  }
 
- supabaseClient=window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
- );
+ supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
  const {data,error}=await supabaseClient.auth.getSession();
-
  if(error){
   showMessage("تعذر التحقق من جلسة الحساب.");
   return;
@@ -512,7 +570,6 @@ async function initializeApp(){
    updateUserInterface(null);
    return;
   }
-
   if(session){
    updateUserInterface(session.user);
    setTimeout(()=>loadProfile(session.user),0);
@@ -522,6 +579,5 @@ async function initializeApp(){
 
 initializeApp();
 </script>
-
 </body>
 </html>
