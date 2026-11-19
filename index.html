@@ -257,9 +257,12 @@ async function signUp(){
  setLoading(true);
 
  const {data,error}=await supabaseClient.auth.signUp({
-  email:email,
-  password:password
- });
+  email: email,
+  password: password,
+  options: {
+    emailRedirectTo: "https://portoreco474-dotcom.github.io/RABIILIKER-/"
+  }
+});
 
  setLoading(false);
 
