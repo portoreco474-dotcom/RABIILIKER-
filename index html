@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#172554">
+<title>RABIILIKER</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f1f5fb;
+ color:#172554;
+}
+header{
+ background:linear-gradient(120deg,#172554,#5145cd);
+ color:white;padding:25px 18px;
+ border-radius:0 0 25px 25px;
+}
+.logo{font-size:27px;font-weight:bold}
+header p{color:#dbeafe;font-size:14px}
+.container{max-width:850px;margin:auto;padding:16px}
+.card{
+ background:white;padding:18px;
+ border-radius:17px;margin-bottom:15px;
+ box-shadow:0 4px 15px #1725540b;
+}
+.balance{
+ background:linear-gradient(120deg,#4338ca,#7c3aed);
+ color:white;
+}
+.balance h2{font-size:30px;margin:12px 0}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+}
+.stat{
+ background:#f3f5ff;
+ padding:17px;border-radius:14px;
+ text-align:center;
+}
+.stat strong{display:block;font-size:22px;color:#5145cd}
+h3{margin-top:0}
+button,select,input{
+ width:100%;padding:13px;
+ border-radius:10px;
+ border:1px solid #dbe3f0;
+ font-size:15px;
+ margin-top:9px;
+}
+button{
+ background:#5145cd;color:white;
+ border:0;font-weight:bold;
+ cursor:pointer;
+}
+button.secondary{background:#e9eafe;color:#4338ca}
+.item{
+ border:1px solid #e8edf5;
+ border-radius:12px;padding:13px;
+ margin:10px 0;
+}
+.item strong{display:block;margin-bottom:7px}
+.small{color:#64748b;font-size:13px}
+nav{
+ display:flex;gap:8px;flex-wrap:wrap;
+ margin-bottom:15px;
+}
+nav button{width:auto;flex:1;min-width:90px}
+footer{text-align:center;color:#64748b;padding:20px;font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">🚀 RABIILIKER</div>
+ <p>منصتك العربية لاكتشاف المحتوى والتفاعل الحقيقي</p>
+</header>
+
+<div class="container">
+
+ <div class="card balance">
+  <div>رصيد النقاط التجريبي</div>
+  <h2>0 نقطة</h2>
+  <span>مرحباً بك في RABIILIKER</span>
+ </div>
+
+ <div class="grid">
+  <div class="stat">
+   <strong>0</strong>
+   <span>النقاط اليومية</span>
+  </div>
+  <div class="stat">
+   <strong>0</strong>
+   <span>المهام المكتملة</span>
+  </div>
+  <div class="stat">
+   <strong>0</strong>
+   <span>المحتويات المكتشفة</span>
+  </div>
+  <div class="stat">
+   <strong>0</strong>
+   <span>رصيد الحساب</span>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>👤 حسابي</h3>
+  <input type="email" placeholder="البريد الإلكتروني">
+  <button onclick="alert('سيتم تفعيل تسجيل الدخول بعد ربط قاعدة البيانات')">
+   تسجيل الدخول
+  </button>
+  <p class="small">سيتم تفعيل الحسابات الحقيقية في المرحلة القادمة.</p>
+ </div>
+
+ <div class="card">
+  <h3>⭐ باقات النقاط</h3>
+  <div class="grid">
+   <div class="item">
+    <strong>100 نقطة</strong>
+    <span class="small">باقة تجريبية</span>
+   </div>
+   <div class="item">
+    <strong>500 نقطة</strong>
+    <span class="small">باقة تجريبية</span>
+   </div>
+   <div class="item">
+    <strong>1000 نقطة</strong>
+    <span class="small">باقة تجريبية</span>
+   </div>
+   <div class="item">
+    <strong>2000 نقطة</strong>
+    <span class="small">باقة تجريبية</span>
+   </div>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>🌍 الدول المستهدفة</h3>
+  <select>
+   <option>اختر الدولة</option>
+   <option>المغرب</option>
+   <option>الجزائر</option>
+   <option>تونس</option>
+   <option>مصر</option>
+   <option>السعودية</option>
+   <option>الإمارات</option>
+   <option>فرنسا</option>
+   <option>جميع الدول</option>
+  </select>
+ </div>
+
+ <div class="card">
+  <h3>🎮 مركز المحتوى</h3>
+  <nav>
+   <button onclick="showTab('likes')">👍 الإعجابات</button>
+   <button onclick="showTab('comments')">💬 التعليقات</button>
+   <button onclick="showTab('reels')">🎬 Reels</button>
+  </nav>
+
+  <div id="tabContent">
+   <div class="item">
+    <strong>👋 مرحباً بك</strong>
+    <span class="small">اكتشف محتويات جديدة وشارك بآرائك الحقيقية.</span>
+   </div>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>📊 ملخص النشاط</h3>
+  <p>النقاط المكتسبة: 0</p>
+  <p>المهام المكتملة: 0</p>
+  <p>آخر نشاط: لا يوجد</p>
+ </div>
+
+</div>
+
+<footer>
+RABIILIKER © 2026
+<br>منصة التفاعل الاجتماعي
+</footer>
+
+<script>
+function showTab(type){
+ const content=document.getElementById('tabContent');
+ const data={
+  likes:'👍 اكتشف المنشورات وعبّر عن إعجابك الحقيقي.',
+  comments:'💬 شارك بتعليقات مفيدة وصادقة.',
+  reels:'🎬 اكتشف مقاطع Reels جديدة.'
+ };
+ content.innerHTML='<div class="item"><strong>'+
+ data[type]+'</strong><span class="small">سيتم ربط المحتوى الحقيقي في المرحلة القادمة.</span></div>';
+}
+</script>
+
+</body>
+</html>
+
+HTML
