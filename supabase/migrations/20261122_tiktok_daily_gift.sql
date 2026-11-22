@@ -1,10 +1,11 @@
 -- RABIILIKER: secure daily TikTok tap gift counter
+-- Daily reset uses Africa/Casablanca local calendar date.
 -- Run once in Supabase SQL Editor. This tracks internal RABIILIKER taps only;
 -- it does not click, like, follow, or view anything on TikTok.
 
 create table if not exists public.tiktok_daily_gifts (
   user_id uuid not null references auth.users(id) on delete cascade,
-  gift_date date not null default (now() at time zone 'utc')::date,
+  gift_date date not null default (now() at time zone 'Africa/Casablanca')::date,
   granted_count integer not null default 20000 check (granted_count = 20000),
   used_count integer not null default 0 check (used_count >= 0 and used_count <= granted_count),
   claimed_at timestamptz not null default now(),
@@ -23,7 +24,7 @@ set search_path = ''
 as $$
 declare
   v_uid uuid := auth.uid();
-  v_date date := (now() at time zone 'utc')::date;
+  v_date date := (now() at time zone 'Africa/Casablanca')::date;
   v_row public.tiktok_daily_gifts%rowtype;
 begin
   if v_uid is null then
@@ -56,7 +57,7 @@ set search_path = ''
 as $$
 declare
   v_uid uuid := auth.uid();
-  v_date date := (now() at time zone 'utc')::date;
+  v_date date := (now() at time zone 'Africa/Casablanca')::date;
   v_row public.tiktok_daily_gifts%rowtype;
 begin
   if v_uid is null then
@@ -105,7 +106,7 @@ set search_path = ''
 as $$
 declare
   v_uid uuid := auth.uid();
-  v_date date := (now() at time zone 'utc')::date;
+  v_date date := (now() at time zone 'Africa/Casablanca')::date;
   v_row public.tiktok_daily_gifts%rowtype;
 begin
   if v_uid is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
