@@ -96,3 +96,27 @@ revoke all on function public.claim_tiktok_daily_gift() from public, anon;
 revoke all on function public.use_tiktok_gift_tap() from public, anon;
 grant execute on function public.claim_tiktok_daily_gift() to authenticated;
 grant execute on function public.use_tiktok_gift_tap() to authenticated;
+
+create or replace function public.get_tiktok_daily_gift_status()
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_uid uuid := auth.uid();
+  v_date date := (now() at time zone 'utc')::date;
+  v_row public.tiktok_daily_gifts%rowtype;
+begin
+  if v_uid is null then raise exception 'يجب تسجيل الدخول أولاً'; end if;
+  select * into v_row from public.tiktok_daily_gifts
+  where user_id = v_uid and gift_date = v_date;
+  if not found then
+    return jsonb_build_object('claimed', false, 'granted', 20000, 'used', 0, 'remaining', 20000, 'gift_date', v_date);
+  end if;
+  return jsonb_build_object('claimed', true, 'granted', v_row.granted_count, 'used', v_row.used_count,
+    'remaining', v_row.granted_count - v_row.used_count, 'gift_date', v_row.gift_date);
+end;
+$$;
+revoke all on function public.get_tiktok_daily_gift_status() from public, anon;
+grant execute on function public.get_tiktok_daily_gift_status() to authenticated;
